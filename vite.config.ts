@@ -109,7 +109,7 @@ export default defineConfig(({ mode }) => {
 
 						// PDF and document processing - split into separate chunks
 						"pdf-lib": ["pdf-lib"],
-						"pdf-utils": ["qrcode", "crypto-js", "js-sha3"],
+						"pdf-utils": ["qrcode"],
 
 						// Data processing and file handling
 						"data-processing": ["jszip", "papaparse"],
