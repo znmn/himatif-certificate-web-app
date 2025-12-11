@@ -1,0 +1,40 @@
+{
+	"workbench.iconTheme": "material-icon-theme",
+	// ---- Formatting ----
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+
+	// ---- TypeScript / JS ----
+	"javascript.updateImportsOnFileMove.enabled": "prompt",
+	"typescript.updateImportsOnFileMove.enabled": "prompt",
+	"typescript.preferences.importModuleSpecifier": "shortest",
+
+	// Prefer showing type errors clearly
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit"
+	},
+
+	// ---- ESLint ----
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact"
+	],
+
+	// ---- Tailwind (if used) ----
+	"tailwindCSS.emmetCompletions": true,
+	"editor.quickSuggestions": {
+		"strings": true
+	},
+
+	// ---- UI things ----
+	"editor.minimap.enabled": false,
+
+	// ---- Path / module resolution (if using tsconfig paths) ----
+	"typescript.preferences.importModuleSpecifierEnding": "js",
+	"javascript.preferences.importModuleSpecifierEnding": "js",
+	"prettier.useTabs": true,
+
+	"tailwindCSS.files.exclude": ["**/components/ui/**"]
+}
