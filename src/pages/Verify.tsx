@@ -547,21 +547,15 @@ const Verify: React.FC = () => {
 						</div>
 					</CardHeader>
 					<CardContent>
-						<Alert
-							variant={
-								verificationResults.every((r) => r.verification.isValid)
-									? "default"
-									: "destructive"
-							}
-						>
-							<AlertDescription>
-								<div className="space-y-4 w-full">
-									{verificationResults.map(
-										({ id, source, fileName, verification, extractedData }) => (
-											<div
-												key={id}
-												className="space-y-3 border rounded-md p-3 bg-background"
-											>
+						<div className="space-y-4 w-full">
+							{verificationResults.map(
+								({ id, source, fileName, verification, extractedData }) => (
+									<Alert
+										key={id}
+										variant={verification.isValid ? "default" : "destructive"}
+									>
+										<AlertDescription>
+											<div className="space-y-3 w-full">
 												<div className="flex items-center gap-2">
 													{verification.isValid ? (
 														<CheckCircle className="h-5 w-5 text-green-500" />
@@ -664,11 +658,11 @@ const Verify: React.FC = () => {
 													)}
 												</div>
 											</div>
-										)
-									)}
-								</div>
-							</AlertDescription>
-						</Alert>
+										</AlertDescription>
+									</Alert>
+								)
+							)}
+						</div>
 					</CardContent>
 				</Card>
 			)}
