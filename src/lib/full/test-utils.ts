@@ -337,8 +337,8 @@ export function generateOnchainSignCSV(results: OnchainTestResult[]): string {
 
 	const headers = [
 		"Nama File",
-		"Waktu Tanda Tangan t_sign (s)",
-		"Waktu Konfirmasi Blockchain t_confirm (s)",
+		"Lama Eksekusi Tanda Tangan (s)",
+		"Lama Eksekusi Konfirmasi Blockchain [t_confirm] (s)",
 		"Waktu Total (s)",
 		"Ukuran File Asli (bytes)",
 		"Ukuran File Setelah Ditandatangani (bytes)",
