@@ -374,6 +374,10 @@ export function generateOnchainVerifyCSV(results: OnchainTestResult[]): string {
 	const headers = [
 		"Nama File",
 		"Lama Eksekusi Verifikasi (s)",
+		"Gas Used",
+		"Effective Gas Price (wei)",
+		"Total Fee (wei)",
+		"Total Fee (ETH)",
 		"Hash",
 		"Nomor Sertifikat",
 		"Recipient",
@@ -384,9 +388,14 @@ export function generateOnchainVerifyCSV(results: OnchainTestResult[]): string {
 		"Error",
 	];
 
+	// Menghasilkan CSV detail operasi verifikasi
 	const rows = results.map((result) => [
 		result.fileName,
 		result.verifyTime.toFixed(6),
+		result.gasUsed?.toString() || "",
+		result.effectiveGasPrice?.toString() || "",
+		result.totalFee?.toString() || "",
+		result.totalFeeETH || "",
 		result.hash,
 		result.number,
 		result.recipient,
