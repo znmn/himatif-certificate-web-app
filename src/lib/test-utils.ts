@@ -7,6 +7,7 @@ import {
 import { ethers } from "ethers";
 import { config } from "@/config";
 import { VerificationContract } from "./contract";
+import Papa from "papaparse";
 
 export interface TestResult {
 	fileName: string;
@@ -408,7 +409,10 @@ export function generateSignCSV(results: TestResult[]): string {
 		result.error || "",
 	]);
 
-	return [headers, ...rows].map((row) => row.join(",")).join("\n");
+	return Papa.unparse({
+		fields: headers,
+		data: rows,
+	});
 }
 
 // Menghasilkan CSV detail operasi verifikasi
@@ -450,7 +454,10 @@ export function generateVerifyCSV(results: TestResult[]): string {
 		result.error || "",
 	]);
 
-	return [headers, ...rows].map((row) => row.join(",")).join("\n");
+	return Papa.unparse({
+		fields: headers,
+		data: rows,
+	});
 }
 
 // Menghasilkan laporan statistik TXT

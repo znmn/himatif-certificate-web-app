@@ -5,6 +5,7 @@ import {
 } from "./pdf-utils";
 import { ethers } from "ethers";
 import { OnchainVerificationContract } from "./contract";
+import Papa from "papaparse";
 
 export interface OnchainTestResult {
 	fileName: string;
@@ -375,7 +376,10 @@ export function generateOnchainSignCSV(results: OnchainTestResult[]): string {
 		result.error || "",
 	]);
 
-	return [headers, ...rows].map((row) => row.join(",")).join("\n");
+	return Papa.unparse({
+		fields: headers,
+		data: rows,
+	});
 }
 
 export function generateOnchainVerifyCSV(results: OnchainTestResult[]): string {
@@ -414,7 +418,10 @@ export function generateOnchainVerifyCSV(results: OnchainTestResult[]): string {
 		result.error || "",
 	]);
 
-	return [headers, ...rows].map((row) => row.join(",")).join("\n");
+	return Papa.unparse({
+		fields: headers,
+		data: rows,
+	});
 }
 
 export function generateOnchainStatsTXT(

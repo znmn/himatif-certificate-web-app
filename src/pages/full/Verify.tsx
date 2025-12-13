@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { config } from "@/config";
+import Papa from "papaparse";
 import {
 	FileUpload,
 	ActionButtons,
@@ -233,7 +234,7 @@ const VerifyOnchain: React.FC = () => {
 			return;
 		}
 
-		const header = [
+		const headers = [
 			"No",
 			"Sumber",
 			"Nama File",
@@ -245,13 +246,7 @@ const VerifyOnchain: React.FC = () => {
 			"Status",
 			"Alamat Penandatangan",
 			"Nama Penandatangan",
-		].join(",");
-
-		const escapeCsv = (value: string | number | boolean | null | undefined) => {
-			const str = String(value ?? "");
-			const escaped = str.replace(/"/g, '""');
-			return `"${escaped}"`;
-		};
+		];
 
 		const rows = verificationResults.map((result, index) => {
 			const { source, fileName, verification, recalculatedHash } = result;
@@ -273,12 +268,13 @@ const VerifyOnchain: React.FC = () => {
 				status,
 				verification.signer,
 				verification.signerNameAtTime || "",
-			]
-				.map(escapeCsv)
-				.join(",");
+			];
 		});
 
-		const csvContent = [header, ...rows].join("\r\n");
+		const csvContent = Papa.unparse({
+			fields: headers,
+			data: rows,
+		});
 		const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement("a");
