@@ -6,6 +6,9 @@ export const config = {
 	// Mode pengujian (aktifkan/nonaktifkan halaman Tests dan GenerateTampering)
 	TESTING_ENABLED: import.meta.env.VITE_TESTING_ENABLED === "true",
 
+	// Mode hybrid only (nonaktifkan halaman full onchain jika true)
+	ONLY_HYBRID: import.meta.env.VITE_ONLY_HYBRID !== "false",
+
 	// Konfigurasi Kontrak Hybrid (tanda tangan off-chain, verifikasi on-chain)
 	HYBRID_CONTRACT_ADDRESS: import.meta.env.VITE_HYBRID_CONTRACT_ADDRESS || "",
 

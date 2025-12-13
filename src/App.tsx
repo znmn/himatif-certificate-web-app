@@ -23,7 +23,6 @@ import { Toaster } from "@/components/ui/sonner";
 import { config } from "@/config";
 import Sign from "@/pages/Sign";
 import Verify from "@/pages/Verify";
-import { SignOnchain, VerifyOnchain } from "@/pages/full";
 
 // Lazy load testing pages only when TESTING_ENABLED is true
 const Tests = config.TESTING_ENABLED
@@ -32,9 +31,18 @@ const Tests = config.TESTING_ENABLED
 const GenerateTampering = config.TESTING_ENABLED
 	? lazy(() => import("@/pages/GenerateTampering"))
 	: null;
-const TestsOnchain = config.TESTING_ENABLED
-	? lazy(() => import("@/pages/full/Tests"))
+
+// Lazy load full onchain pages only when ONLY_HYBRID is false
+const SignOnchain = !config.ONLY_HYBRID
+	? lazy(() => import("@/pages/full/Sign"))
 	: null;
+const VerifyOnchain = !config.ONLY_HYBRID
+	? lazy(() => import("@/pages/full/Verify"))
+	: null;
+const TestsOnchain =
+	config.TESTING_ENABLED && !config.ONLY_HYBRID
+		? lazy(() => import("@/pages/full/Tests"))
+		: null;
 
 function App() {
 	return (
@@ -68,10 +76,37 @@ function App() {
 							/>
 						)}
 						{/* Full onchain routes */}
-						<Route path="/full" element={<SignOnchain />} />
-						<Route path="/full/sign" element={<SignOnchain />} />
-						<Route path="/full/verify" element={<VerifyOnchain />} />
-						{config.TESTING_ENABLED && TestsOnchain && (
+						{!config.ONLY_HYBRID && SignOnchain && (
+							<>
+								<Route
+									path="/full"
+									element={
+										<Suspense fallback={null}>
+											<SignOnchain />
+										</Suspense>
+									}
+								/>
+								<Route
+									path="/full/sign"
+									element={
+										<Suspense fallback={null}>
+											<SignOnchain />
+										</Suspense>
+									}
+								/>
+							</>
+						)}
+						{!config.ONLY_HYBRID && VerifyOnchain && (
+							<Route
+								path="/full/verify"
+								element={
+									<Suspense fallback={null}>
+										<VerifyOnchain />
+									</Suspense>
+								}
+							/>
+						)}
+						{!config.ONLY_HYBRID && config.TESTING_ENABLED && TestsOnchain && (
 							<Route
 								path="/full/tests"
 								element={
@@ -109,7 +144,7 @@ function SiteHeader() {
 
 				{/* Navigation Section */}
 				<nav className="hidden md:flex items-center gap-1">
-					{isOnchainMode ? (
+					{!config.ONLY_HYBRID && isOnchainMode ? (
 						<>
 							<NavigationLink to="/full/sign">
 								<PenTool className="h-4 w-4" />
@@ -159,6 +194,9 @@ function SiteHeader() {
 function ModeSwitch() {
 	const location = useLocation();
 	const isOnchainMode = location.pathname.startsWith("/full");
+
+	// Hide mode switch if ONLY_HYBRID is true
+	if (config.ONLY_HYBRID) return null;
 
 	return (
 		<div className="flex items-center gap-1 p-1 bg-muted rounded-lg">
@@ -217,7 +255,7 @@ function MobileBottomNav() {
 	return (
 		<div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-xl border-t border-border/50 shadow-lg">
 			<nav className="flex items-center justify-around px-2 py-2">
-				{isOnchainMode ? (
+				{!config.ONLY_HYBRID && isOnchainMode ? (
 					<>
 						<BottomNavLink to="/full/sign">
 							<PenTool className="h-5 w-5" />
@@ -257,13 +295,15 @@ function MobileBottomNav() {
 								<span className="text-xs font-medium">Tests</span>
 							</BottomNavLink>
 						)}
-						<Link
-							to="/full/sign"
-							className="flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent/50"
-						>
-							<Database className="h-5 w-5" />
-							<span className="text-xs font-medium">Onchain</span>
-						</Link>
+						{!config.ONLY_HYBRID && (
+							<Link
+								to="/full/sign"
+								className="flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent/50"
+							>
+								<Database className="h-5 w-5" />
+								<span className="text-xs font-medium">Onchain</span>
+							</Link>
+						)}
 					</>
 				)}
 			</nav>
