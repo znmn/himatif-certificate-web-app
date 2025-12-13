@@ -3,6 +3,9 @@ export const config = {
 	// URL dasar untuk link verifikasi
 	BASE_URL: import.meta.env.VITE_BASE_URL || "http://localhost:5173",
 
+	// Mode pengujian (aktifkan/nonaktifkan halaman Tests dan GenerateTampering)
+	TESTING_ENABLED: import.meta.env.VITE_TESTING_ENABLED === "true",
+
 	// Konfigurasi Kontrak Hybrid (tanda tangan off-chain, verifikasi on-chain)
 	HYBRID_CONTRACT_ADDRESS: import.meta.env.VITE_HYBRID_CONTRACT_ADDRESS || "",
 

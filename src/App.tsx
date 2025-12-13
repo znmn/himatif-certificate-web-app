@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, lazy, Suspense, type ReactNode } from "react";
 import {
 	Moon,
 	Sun,
@@ -20,10 +20,21 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
+import { config } from "@/config";
 import Sign from "@/pages/Sign";
 import Verify from "@/pages/Verify";
-import Tests from "@/pages/Tests";
-import { SignOnchain, VerifyOnchain, TestsOnchain } from "@/pages/full";
+import { SignOnchain, VerifyOnchain } from "@/pages/full";
+
+// Lazy load testing pages only when TESTING_ENABLED is true
+const Tests = config.TESTING_ENABLED
+	? lazy(() => import("@/pages/Tests"))
+	: null;
+const GenerateTampering = config.TESTING_ENABLED
+	? lazy(() => import("@/pages/GenerateTampering"))
+	: null;
+const TestsOnchain = config.TESTING_ENABLED
+	? lazy(() => import("@/pages/full/Tests"))
+	: null;
 
 function App() {
 	return (
@@ -36,12 +47,40 @@ function App() {
 						<Route path="/" element={<Sign />} />
 						<Route path="/sign" element={<Sign />} />
 						<Route path="/verify" element={<Verify />} />
-						<Route path="/tests" element={<Tests />} />
+						{config.TESTING_ENABLED && Tests && (
+							<Route
+								path="/tests"
+								element={
+									<Suspense fallback={null}>
+										<Tests />
+									</Suspense>
+								}
+							/>
+						)}
+						{config.TESTING_ENABLED && GenerateTampering && (
+							<Route
+								path="/generate-tampering"
+								element={
+									<Suspense fallback={null}>
+										<GenerateTampering />
+									</Suspense>
+								}
+							/>
+						)}
 						{/* Full onchain routes */}
 						<Route path="/full" element={<SignOnchain />} />
 						<Route path="/full/sign" element={<SignOnchain />} />
 						<Route path="/full/verify" element={<VerifyOnchain />} />
-						<Route path="/full/tests" element={<TestsOnchain />} />
+						{config.TESTING_ENABLED && TestsOnchain && (
+							<Route
+								path="/full/tests"
+								element={
+									<Suspense fallback={null}>
+										<TestsOnchain />
+									</Suspense>
+								}
+							/>
+						)}
 					</Routes>
 				</main>
 				<MobileBottomNav />
@@ -80,10 +119,12 @@ function SiteHeader() {
 								<ShieldCheck className="h-4 w-4" />
 								Verifikasi
 							</NavigationLink>
-							<NavigationLink to="/full/tests">
-								<TestTube className="h-4 w-4" />
-								Tests
-							</NavigationLink>
+							{config.TESTING_ENABLED && (
+								<NavigationLink to="/full/tests">
+									<TestTube className="h-4 w-4" />
+									Tests
+								</NavigationLink>
+							)}
 						</>
 					) : (
 						<>
@@ -95,10 +136,12 @@ function SiteHeader() {
 								<ShieldCheck className="h-4 w-4" />
 								Verifikasi
 							</NavigationLink>
-							<NavigationLink to="/tests">
-								<TestTube className="h-4 w-4" />
-								Tests
-							</NavigationLink>
+							{config.TESTING_ENABLED && (
+								<NavigationLink to="/tests">
+									<TestTube className="h-4 w-4" />
+									Tests
+								</NavigationLink>
+							)}
 						</>
 					)}
 				</nav>
@@ -184,10 +227,12 @@ function MobileBottomNav() {
 							<ShieldCheck className="h-5 w-5" />
 							<span className="text-xs font-medium">Verifikasi</span>
 						</BottomNavLink>
-						<BottomNavLink to="/full/tests">
-							<TestTube className="h-5 w-5" />
-							<span className="text-xs font-medium">Tests</span>
-						</BottomNavLink>
+						{config.TESTING_ENABLED && (
+							<BottomNavLink to="/full/tests">
+								<TestTube className="h-5 w-5" />
+								<span className="text-xs font-medium">Tests</span>
+							</BottomNavLink>
+						)}
 						<Link
 							to="/sign"
 							className="flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent/50"
@@ -206,10 +251,12 @@ function MobileBottomNav() {
 							<ShieldCheck className="h-5 w-5" />
 							<span className="text-xs font-medium">Verifikasi</span>
 						</BottomNavLink>
-						<BottomNavLink to="/tests">
-							<TestTube className="h-5 w-5" />
-							<span className="text-xs font-medium">Tests</span>
-						</BottomNavLink>
+						{config.TESTING_ENABLED && (
+							<BottomNavLink to="/tests">
+								<TestTube className="h-5 w-5" />
+								<span className="text-xs font-medium">Tests</span>
+							</BottomNavLink>
+						)}
 						<Link
 							to="/full/sign"
 							className="flex flex-col items-center gap-1 px-3 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent/50"
