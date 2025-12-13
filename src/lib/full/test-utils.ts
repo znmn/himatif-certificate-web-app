@@ -12,11 +12,19 @@ export interface OnchainTestResult {
 	confirmTime: number; // t_confirm: waktu konfirmasi blockchain
 	signTimeTotal: number; // total = signTime + confirmTime
 	verifyTime: number;
+	// Sign operation gas data
 	gasUsed: bigint;
 	effectiveGasPrice: bigint;
 	totalFee: bigint;
 	totalFeeETH: string;
 	txHash: string;
+	// Verify operation gas data (kosong karena view function)
+	verifyGasUsed?: bigint;
+	verifyEffectiveGasPrice?: bigint;
+	verifyTotalFee?: bigint;
+	verifyTotalFeeETH?: string;
+	verifyTxHash?: string;
+
 	signedPdf?: Uint8Array;
 	originalFileSizeBytes?: number;
 	signedFileSizeBytes?: number;
@@ -378,13 +386,13 @@ export function generateOnchainVerifyCSV(results: OnchainTestResult[]): string {
 		"Effective Gas Price (wei)",
 		"Total Fee (wei)",
 		"Total Fee (ETH)",
+		"TX Hash",
 		"Hash",
 		"Nomor Sertifikat",
 		"Recipient",
 		"Title",
 		"Timestamp",
 		"Valid",
-		"TX Hash",
 		"Error",
 	];
 
@@ -392,17 +400,17 @@ export function generateOnchainVerifyCSV(results: OnchainTestResult[]): string {
 	const rows = results.map((result) => [
 		result.fileName,
 		result.verifyTime.toFixed(6),
-		result.gasUsed?.toString() || "",
-		result.effectiveGasPrice?.toString() || "",
-		result.totalFee?.toString() || "",
-		result.totalFeeETH || "",
+		result.verifyGasUsed?.toString() || "",
+		result.verifyEffectiveGasPrice?.toString() || "",
+		result.verifyTotalFee?.toString() || "",
+		result.verifyTotalFeeETH || "",
+		result.verifyTxHash || "",
 		result.hash,
 		result.number,
 		result.recipient,
 		result.title,
 		result.timestamp.toString(),
 		result.isValid ? "Yes" : "No",
-		result.txHash || "",
 		result.error || "",
 	]);
 

@@ -12,10 +12,19 @@ export interface TestResult {
 	fileName: string;
 	signTime: number;
 	verifyTime: number;
+	// Sign operation gas data (kosong untuk hybrid karena tidak ada transaksi)
 	gasUsed?: bigint;
 	effectiveGasPrice?: bigint;
 	totalFee?: bigint;
 	totalFeeETH?: string;
+	txHash?: string;
+	// Verify operation gas data (kosong karena offchain verification)
+	verifyGasUsed?: bigint;
+	verifyEffectiveGasPrice?: bigint;
+	verifyTotalFee?: bigint;
+	verifyTotalFeeETH?: string;
+	verifyTxHash?: string;
+
 	signedPdf?: Uint8Array;
 	originalFileSizeBytes?: number;
 	signedFileSizeBytes?: number;
@@ -370,6 +379,7 @@ export function generateSignCSV(results: TestResult[]): string {
 		"Effective Gas Price (wei)",
 		"Total Fee (wei)",
 		"Total Fee (ETH)",
+		"TX Hash",
 		"Hash",
 		"Signature",
 		"Nomor Sertifikat",
@@ -388,6 +398,7 @@ export function generateSignCSV(results: TestResult[]): string {
 		result.effectiveGasPrice?.toString() || "",
 		result.totalFee?.toString() || "",
 		result.totalFeeETH || "",
+		result.txHash || "",
 		result.hash,
 		result.signature,
 		result.number,
@@ -401,6 +412,8 @@ export function generateSignCSV(results: TestResult[]): string {
 }
 
 // Menghasilkan CSV detail operasi verifikasi
+// Untuk pendekatan hybrid, verifikasi dilakukan secara offchain
+// sehingga tidak ada gas dan TX Hash. Kolom tetap disertakan untuk konsistensi.
 export function generateVerifyCSV(results: TestResult[]): string {
 	const headers = [
 		"Nama File",
@@ -409,6 +422,7 @@ export function generateVerifyCSV(results: TestResult[]): string {
 		"Effective Gas Price (wei)",
 		"Total Fee (wei)",
 		"Total Fee (ETH)",
+		"TX Hash",
 		"Hash",
 		"Nomor Sertifikat",
 		"Recipient",
@@ -418,13 +432,15 @@ export function generateVerifyCSV(results: TestResult[]): string {
 		"Error",
 	];
 
+	// Menggunakan field verify* yang terpisah dari field sign
 	const rows = results.map((result) => [
 		result.fileName,
 		result.verifyTime.toFixed(6),
-		result.gasUsed?.toString() || "",
-		result.effectiveGasPrice?.toString() || "",
-		result.totalFee?.toString() || "",
-		result.totalFeeETH || "",
+		result.verifyGasUsed?.toString() || "",
+		result.verifyEffectiveGasPrice?.toString() || "",
+		result.verifyTotalFee?.toString() || "",
+		result.verifyTotalFeeETH || "",
+		result.verifyTxHash || "",
 		result.hash,
 		result.number,
 		result.recipient,
