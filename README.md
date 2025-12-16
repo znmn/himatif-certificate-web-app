@@ -2,7 +2,7 @@
 
 [🇬🇧 English Version](README-EN.md)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/znmn/himatif-certificate-web-app)
+[![Deploy dengan Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/znmn/himatif-certificate-web-app)
 
 ## 1. Deskripsi Proyek
 
@@ -121,7 +121,7 @@ Aplikasi akan berjalan di `http://localhost:5137`
 
 Klik tombol di bawah untuk deploy langsung ke Vercel:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/znmn/himatif-certificate-web-app)
+[![Deploy dengan Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/znmn/himatif-certificate-web-app)
 
 ### Manual Deployment
 
